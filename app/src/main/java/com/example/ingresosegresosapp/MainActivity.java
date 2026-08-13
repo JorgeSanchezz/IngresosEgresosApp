@@ -323,19 +323,28 @@ public class MainActivity extends AppCompatActivity implements MovimientoAdapter
         final EditText etEf = new EditText(this);
         etEf.setHint("Saldo Inicial Efectivo ($)");
         etEf.setInputType(android.text.InputType.TYPE_CLASS_NUMBER | android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL);
-        etEf.setText(String.valueOf(dbHelper.obtenerSaldoInicial("EFECTIVO")));
+
+        // Si el valor es mayor a 0, se muestra; si es 0.0, se deja vacío para ver el Hint
+        double saldoEf = dbHelper.obtenerSaldoInicial("EFECTIVO");
+        if (saldoEf > 0) {
+            etEf.setText(String.valueOf(saldoEf));
+        }
         layout.addView(etEf);
 
         final EditText etBa = new EditText(this);
         etBa.setHint("Saldo Inicial Banco ($)");
         etBa.setInputType(android.text.InputType.TYPE_CLASS_NUMBER | android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL);
-        etBa.setText(String.valueOf(dbHelper.obtenerSaldoInicial("BANCO")));
+
+        double saldoBa = dbHelper.obtenerSaldoInicial("BANCO");
+        if (saldoBa > 0) {
+            etBa.setText(String.valueOf(saldoBa));
+        }
         layout.addView(etBa);
 
         builder.setView(layout);
         builder.setPositiveButton("Guardar", (dialog, which) -> {
-            double ef = etEf.getText().toString().isEmpty() ? 0.0 : Double.parseDouble(etEf.getText().toString());
-            double ba = etBa.getText().toString().isEmpty() ? 0.0 : Double.parseDouble(etBa.getText().toString());
+            double ef = etEf.getText().toString().trim().isEmpty() ? 0.0 : Double.parseDouble(etEf.getText().toString().trim());
+            double ba = etBa.getText().toString().trim().isEmpty() ? 0.0 : Double.parseDouble(etBa.getText().toString().trim());
 
             dbHelper.guardarSaldoInicial("EFECTIVO", ef);
             dbHelper.guardarSaldoInicial("BANCO", ba);
