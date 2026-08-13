@@ -5,7 +5,12 @@
       <map>
         <entry key="..\:/Jorge/Descargas/IngresosEgresosApp/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2075" />
         <entry key="..\:/Jorge/Descargas/IngresosEgresosApp/app/src/main/res/layout/activity_main.xml" value="0.22" />
+        <entry key="..\:/Jorge/Descargas/IngresosEgresosApp/app/src/main/res/layout/dialog_categorias.xml" value="0.17074275362318841" />
+        <entry key="..\:/Jorge/Descargas/IngresosEgresosApp/app/src/main/res/layout/dialog_grafica.xml" value="0.17074275362318841" />
+        <entry key="..\:/Jorge/Descargas/IngresosEgresosApp/app/src/main/res/layout/dialog_transferencia.xml" value="0.17074275362318841" />
+        <entry key="..\:/Jorge/Descargas/IngresosEgresosApp/app/src/main/res/layout/item_categoria.xml" value="0.17074275362318841" />
         <entry key="..\:/Jorge/Descargas/IngresosEgresosApp/app/src/main/res/layout/item_movimiento.xml" value="0.25" />
+        <entry key="..\:/Jorge/Descargas/IngresosEgresosApp/app/src/main/res/xml/file_paths.xml" value="0.17074275362318841" />
       </map>
     </option>
   </component>

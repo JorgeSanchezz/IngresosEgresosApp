@@ -2,75 +2,114 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="8dp"
-    android:gravity="center_vertical"
-    android:background="?android:attr/selectableItemBackground">
+    android:orientation="vertical"
+    android:background="#FFFFFF"
+    android:padding="10dp"
+    android:layout_marginBottom="6dp"
+    android:elevation="1dp">
 
-    <TextView
-        android:id="@+id/tvFecha"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1.1"
-        android:textSize="11sp"
-        android:textColor="#333333" />
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvFecha"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2026-08-12"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#1565C0" />
+
+        <TextView
+            android:id="@+id/tvCuentaCat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:text="EFECTIVO | Viveres"
+            android:textSize="14sp"
+            android:textColor="#616161" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tvConcepto"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1.6"
-        android:textSize="11sp"
+        android:text="COMPRA EN SUPERMERCADO"
+        android:textSize="16sp"
         android:textStyle="bold"
-        android:textColor="#222222" />
+        android:textColor="#212121"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="4dp" />
 
-    <TextView
-        android:id="@+id/tvDebe"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.8"
-        android:gravity="end"
-        android:textSize="11sp"
-        android:textColor="#2E7D32" />
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
-    <TextView
-        android:id="@+id/tvHaber"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.8"
-        android:gravity="end"
-        android:textSize="11sp"
-        android:textColor="#C62828" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ingreso: "
+            android:textSize="14sp" />
 
-    <TextView
-        android:id="@+id/tvSaldo"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.9"
-        android:gravity="end"
-        android:textSize="11sp"
-        android:textStyle="bold"
-        android:textColor="#0D47A1" />
+        <TextView
+            android:id="@+id/tvDebe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$0.00"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#2E7D32" />
 
-    <!-- Botón Editar -->
-    <ImageButton
-        android:id="@+id/btnEditar"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:background="?android:attr/selectableItemBackgroundBorderless"
-        android:src="@android:drawable/ic_menu_edit"
-        android:contentDescription="Editar"
-        android:scaleType="fitCenter" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="  Egreso: "
+            android:textSize="14sp" />
 
-    <!-- Botón Basura / Eliminar -->
-    <ImageButton
-        android:id="@+id/btnEliminar"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:background="?android:attr/selectableItemBackgroundBorderless"
-        android:src="@android:drawable/ic_menu_delete"
-        android:contentDescription="Eliminar"
-        android:scaleType="fitCenter"
-        android:layout_marginStart="4dp" />
+        <TextView
+            android:id="@+id/tvHaber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$0.00"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#C62828" />
 
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:text="Saldo: "
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvSaldo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$0.00"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#000000" />
+
+        <ImageButton
+            android:id="@+id/btnEditar"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@android:drawable/ic_menu_edit"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_marginStart="6dp"/>
+
+        <ImageButton
+            android:id="@+id/btnEliminar"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@android:drawable/ic_menu_delete"
+            android:background="?attr/selectableItemBackgroundBorderless" />
+    </LinearLayout>
 </LinearLayout>

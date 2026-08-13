@@ -3,38 +3,172 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="12dp"
-    android:background="#FAFAFA">
+    android:padding="8dp"
+    android:background="#F5F5F5">
 
-    <!-- Encabezado Titular -->
-    <TextView
+    <!-- Tarjetas de Saldos -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="EDILBERTO SÁNCHEZ FERNÁNDEZ"
-        android:gravity="center"
-        android:textStyle="bold"
-        android:textSize="15sp"
-        android:textColor="#111111" />
+        android:orientation="horizontal"
+        android:layout_marginBottom="8dp">
 
-    <TextView
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#FFFFFF"
+            android:padding="8dp"
+            android:layout_marginEnd="4dp"
+            android:elevation="2dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="S. Efectivo"
+                android:textSize="12sp"
+                android:textColor="#616161" />
+
+            <TextView
+                android:id="@+id/tvSaldoEfectivo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="$0.00"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="#2E7D32" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#FFFFFF"
+            android:padding="8dp"
+            android:layout_marginHorizontal="2dp"
+            android:elevation="2dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="S. Banco"
+                android:textSize="12sp"
+                android:textColor="#616161" />
+
+            <TextView
+                android:id="@+id/tvSaldoBanco"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="$0.00"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="#1565C0" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#FFFFFF"
+            android:padding="8dp"
+            android:layout_marginStart="4dp"
+            android:elevation="2dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Saldo Total"
+                android:textSize="12sp"
+                android:textColor="#616161" />
+
+            <TextView
+                android:id="@+id/tvSaldoTotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="$0.00"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="#000000" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Barra de Herramientas / Filtro Mes y Año -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="ESTADO DE INGRESOS Y EGRESOS"
-        android:gravity="center"
-        android:textStyle="italic|bold"
-        android:textSize="13sp"
-        android:textColor="#555555"
-        android:layout_marginBottom="12dp" />
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="#FFFFFF"
+        android:padding="6dp"
+        android:layout_marginBottom="8dp"
+        android:elevation="1dp">
 
-    <!-- Formulario de Entrada -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Corte: "
+            android:textStyle="bold"
+            android:textSize="14sp" />
+
+        <Spinner
+            android:id="@+id/spMesFiltro"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <Spinner
+            android:id="@+id/spAnioFiltro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/btnVerGrafica"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Gráfica"
+            android:textSize="12sp"
+            style="?attr/materialButtonOutlinedStyle" />
+    </LinearLayout>
+
+    <!-- Formulario de Entrada de Movimientos -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="#FFFFFF"
+        android:padding="10dp"
         android:elevation="2dp"
-        android:padding="12dp"
-        android:layout_marginBottom="12dp">
+        android:layout_marginBottom="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <Button
+                android:id="@+id/btnSeleccionarFecha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2026-08-12"
+                android:textSize="13sp"
+                style="?attr/materialButtonOutlinedStyle"/>
+
+            <Spinner
+                android:id="@+id/spCuentaInput"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <Spinner
+                android:id="@+id/spCategoriaInput"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+        </LinearLayout>
 
         <EditText
             android:id="@+id/etConcepto"
@@ -47,15 +181,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="6dp">
+            android:orientation="horizontal">
 
             <EditText
                 android:id="@+id/etDebe"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Debe (Ingreso)"
+                android:hint="Ingreso ($)"
                 android:inputType="numberDecimal"
                 android:textSize="14sp" />
 
@@ -64,157 +197,119 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Haber (Egreso)"
+                android:hint="Egreso ($)"
                 android:inputType="numberDecimal"
                 android:textSize="14sp" />
         </LinearLayout>
 
-        <Button
-            android:id="@+id/btnAgregar"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Agregar Movimiento"
-            android:layout_marginTop="8dp"
-            android:backgroundTint="#0052CC"
-            android:textColor="#FFFFFF" />
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp">
+
+            <Button
+                android:id="@+id/btnAgregar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Guardar Movimiento" />
+
+            <Button
+                android:id="@+id/btnTransferirMain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Transferir"
+                android:backgroundTint="#7B1FA2"
+                android:layout_marginStart="4dp"/>
+        </LinearLayout>
     </LinearLayout>
 
-    <!-- ENCABEZADO DE LA TABLA -->
+    <!-- Barra de acciones rápidas -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="#0052CC"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:gravity="center_vertical">
+        android:layout_marginBottom="6dp">
 
-        <TextView
+        <Button
+            android:id="@+id/btnGestionCategorias"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1.1"
-            android:text="FECHA"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:textSize="11sp" />
+            android:layout_weight="1"
+            android:text="Categorías"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_marginEnd="2dp"/>
 
-        <TextView
+        <Button
+            android:id="@+id/btnAperturaSaldos"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1.6"
-            android:text="CONCEPTO"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:textSize="11sp" />
+            android:layout_weight="1"
+            android:text="Saldos Inic."
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_marginHorizontal="2dp"/>
 
-        <TextView
+        <Button
+            android:id="@+id/btnExportarExcel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.8"
-            android:gravity="end"
-            android:text="DEBE"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:textSize="11sp" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.8"
-            android:gravity="end"
-            android:text="HABER"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:textSize="11sp" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.9"
-            android:gravity="end"
-            android:text="SALDO"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:textSize="11sp" />
-
-        <View
-            android:layout_width="60dp"
-            android:layout_height="1dp" />
-
+            android:layout_weight="1"
+            android:text="Excel"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_marginStart="2dp"/>
     </LinearLayout>
 
-    <!-- Lista de Registros -->
+    <!-- Tabla Histórica / RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvTabla"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="#FFFFFF" />
+        android:layout_weight="1" />
 
-    <!-- PIE DE PAGINA CON TOTALES Y SALDO ACTUAL -->
+    <!-- Totales del Pie -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="#E8F0FE"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        android:paddingTop="12dp"
-        android:paddingBottom="12dp"
-        android:gravity="center_vertical"
-        android:elevation="3dp">
+        android:background="#FFFFFF"
+        android:padding="8dp"
+        android:elevation="4dp"
+        android:layout_marginTop="4dp">
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="2.7"
-            android:text="TOTALES:"
-            android:textColor="#0052CC"
+            android:text="Totales Mes -> "
             android:textStyle="bold"
-            android:textSize="11sp" />
+            android:textSize="13sp" />
 
-        <!-- Total Suma DEBE -->
         <TextView
             android:id="@+id/tvTotalDebe"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.8"
-            android:gravity="end"
+            android:layout_weight="1"
             android:text="$0.00"
-            android:textColor="#000000"
+            android:textColor="#2E7D32"
             android:textStyle="bold"
-            android:textSize="10sp" />
+            android:textSize="13sp" />
 
-        <!-- Total Suma HABER -->
         <TextView
             android:id="@+id/tvTotalHaber"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.8"
-            android:gravity="end"
+            android:layout_weight="1"
             android:text="$0.00"
-            android:textColor="#000000"
+            android:textColor="#C62828"
             android:textStyle="bold"
-            android:textSize="10sp" />
+            android:textSize="13sp" />
 
-        <!-- SALDO ACTUAL RECIENTE -->
         <TextView
             android:id="@+id/tvSaldoActual"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.9"
-            android:gravity="end"
             android:text="$0.00"
-            android:textColor="#008000"
             android:textStyle="bold"
-            android:textSize="10sp" />
-
-        <View
-            android:layout_width="60dp"
-            android:layout_height="1dp" />
-
+            android:textSize="14sp" />
     </LinearLayout>
-
 </LinearLayout>
