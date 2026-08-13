@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:gravity="center_vertical"
+    android:background="?android:attr/selectableItemBackground">
+
+    <TextView
+        android:id="@+id/tvFecha"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.1"
+        android:textSize="11sp"
+        android:textColor="#333333" />
+
+    <TextView
+        android:id="@+id/tvConcepto"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.6"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        android:textColor="#222222" />
+
+    <TextView
+        android:id="@+id/tvDebe"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.8"
+        android:gravity="end"
+        android:textSize="11sp"
+        android:textColor="#2E7D32" />
+
+    <TextView
+        android:id="@+id/tvHaber"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.8"
+        android:gravity="end"
+        android:textSize="11sp"
+        android:textColor="#C62828" />
+
+    <TextView
+        android:id="@+id/tvSaldo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.9"
+        android:gravity="end"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        android:textColor="#0D47A1" />
+
+    <!-- Botón Editar -->
+    <ImageButton
+        android:id="@+id/btnEditar"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:src="@android:drawable/ic_menu_edit"
+        android:contentDescription="Editar"
+        android:scaleType="fitCenter" />
+
+    <!-- Botón Basura / Eliminar -->
+    <ImageButton
+        android:id="@+id/btnEliminar"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:src="@android:drawable/ic_menu_delete"
+        android:contentDescription="Eliminar"
+        android:scaleType="fitCenter"
+        android:layout_marginStart="4dp" />
+
+</LinearLayout>

@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:background="#FAFAFA">
+
+    <!-- Encabezado Titular -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="EDILBERTO SÁNCHEZ FERNÁNDEZ"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:textColor="#111111" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ESTADO DE INGRESOS Y EGRESOS"
+        android:gravity="center"
+        android:textStyle="italic|bold"
+        android:textSize="13sp"
+        android:textColor="#555555"
+        android:layout_marginBottom="12dp" />
+
+    <!-- Formulario de Entrada -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#FFFFFF"
+        android:elevation="2dp"
+        android:padding="12dp"
+        android:layout_marginBottom="12dp">
+
+        <EditText
+            android:id="@+id/etConcepto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Concepto (ej. RENTA BARBERIA)"
+            android:inputType="textCapCharacters"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="6dp">
+
+            <EditText
+                android:id="@+id/etDebe"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Debe (Ingreso)"
+                android:inputType="numberDecimal"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/etHaber"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Haber (Egreso)"
+                android:inputType="numberDecimal"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnAgregar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Agregar Movimiento"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="#0052CC"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+
+    <!-- ENCABEZADO DE LA TABLA -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#0052CC"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.1"
+            android:text="FECHA"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:textSize="11sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.6"
+            android:text="CONCEPTO"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:textSize="11sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.8"
+            android:gravity="end"
+            android:text="DEBE"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:textSize="11sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.8"
+            android:gravity="end"
+            android:text="HABER"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:textSize="11sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.9"
+            android:gravity="end"
+            android:text="SALDO"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:textSize="11sp" />
+
+        <View
+            android:layout_width="60dp"
+            android:layout_height="1dp" />
+
+    </LinearLayout>
+
+    <!-- Lista de Registros -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvTabla"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#FFFFFF" />
+
+    <!-- PIE DE PAGINA CON TOTALES Y SALDO ACTUAL -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#E8F0FE"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:gravity="center_vertical"
+        android:elevation="3dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2.7"
+            android:text="TOTALES:"
+            android:textColor="#0052CC"
+            android:textStyle="bold"
+            android:textSize="11sp" />
+
+        <!-- Total Suma DEBE -->
+        <TextView
+            android:id="@+id/tvTotalDebe"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.8"
+            android:gravity="end"
+            android:text="$0.00"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:textSize="10sp" />
+
+        <!-- Total Suma HABER -->
+        <TextView
+            android:id="@+id/tvTotalHaber"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.8"
+            android:gravity="end"
+            android:text="$0.00"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:textSize="10sp" />
+
+        <!-- SALDO ACTUAL RECIENTE -->
+        <TextView
+            android:id="@+id/tvSaldoActual"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.9"
+            android:gravity="end"
+            android:text="$0.00"
+            android:textColor="#008000"
+            android:textStyle="bold"
+            android:textSize="10sp" />
+
+        <View
+            android:layout_width="60dp"
+            android:layout_height="1dp" />
+
+    </LinearLayout>
+
+</LinearLayout>
