@@ -4,8 +4,9 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,14 +17,14 @@ import java.util.Locale;
 
 public class MovimientoAdapter extends RecyclerView.Adapter<MovimientoAdapter.ViewHolder> {
 
-    private List<Movimiento> listaMovimientos;
-    private OnItemClickListener listener;
-    private DecimalFormat fmt = new DecimalFormat("$#,##0.00", new DecimalFormatSymbols(Locale.US));
-
     public interface OnItemClickListener {
         void onEditarClick(Movimiento movimiento);
         void onEliminarClick(Movimiento movimiento);
     }
+
+    private final List<Movimiento> listaMovimientos;
+    private final OnItemClickListener listener;
+    private final DecimalFormat fmt = new DecimalFormat("$#,##0.00", new DecimalFormatSymbols(Locale.US));
 
     public MovimientoAdapter(List<Movimiento> listaMovimientos, OnItemClickListener listener) {
         this.listaMovimientos = listaMovimientos;
@@ -40,24 +41,38 @@ public class MovimientoAdapter extends RecyclerView.Adapter<MovimientoAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Movimiento mov = listaMovimientos.get(position);
+        Movimiento m = listaMovimientos.get(position);
 
-        holder.tvFecha.setText(mov.getFecha());
-        holder.tvConcepto.setText(mov.getConcepto());
-        holder.tvCuentaCat.setText(mov.getCuenta() + " | " + mov.getNombreCategoria());
+        // Asignación de datos
+        holder.tvFecha.setText(m.getFecha());
 
-        holder.tvDebe.setText(mov.getDebe() > 0 ? fmt.format(mov.getDebe()) : "$0.00");
-        holder.tvHaber.setText(mov.getHaber() > 0 ? fmt.format(mov.getHaber()) : "$0.00");
-        holder.tvSaldo.setText(fmt.format(mov.getSaldo()));
+        // Muestra Cuenta y Categoría (Ej. EFECTIVO | Alimentos)
+        // Cambia getCategoriaNombre() por getNombreCategoria()
+        String cuentaCat = m.getCuenta() + (m.getNombreCategoria() != null ? " | " + m.getNombreCategoria() : "");
+        holder.tvCuentaCategoria.setText(cuentaCat);
 
-        if ("TRANSFERENCIA".equalsIgnoreCase(mov.getTipoMovimiento())) {
-            holder.tvConcepto.setTextColor(Color.parseColor("#7B1FA2")); // Morado
+        holder.tvConcepto.setText(m.getConcepto());
+        holder.tvMontoIngreso.setText("Ingreso: " + fmt.format(m.getDebe()));
+        holder.tvMontoEgreso.setText("Egreso: " + fmt.format(m.getHaber()));
+
+        // Cálculo y formato de neto/saldo
+        double neto = m.getDebe() - m.getHaber();
+        if (neto >= 0) {
+            holder.tvNeto.setText("+" + fmt.format(neto));
+            holder.tvNeto.setTextColor(Color.parseColor("#2E7D32"));
         } else {
-            holder.tvConcepto.setTextColor(Color.parseColor("#212121"));
+            holder.tvNeto.setText("-" + fmt.format(Math.abs(neto)));
+            holder.tvNeto.setTextColor(Color.parseColor("#C62828"));
         }
 
-        holder.btnEditar.setOnClickListener(v -> listener.onEditarClick(mov));
-        holder.btnEliminar.setOnClickListener(v -> listener.onEliminarClick(mov));
+        // Listeners para los botones de acción
+        holder.btnEditar.setOnClickListener(v -> {
+            if (listener != null) listener.onEditarClick(m);
+        });
+
+        holder.btnEliminar.setOnClickListener(v -> {
+            if (listener != null) listener.onEliminarClick(m);
+        });
     }
 
     @Override
@@ -66,19 +81,21 @@ public class MovimientoAdapter extends RecyclerView.Adapter<MovimientoAdapter.Vi
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvFecha, tvConcepto, tvCuentaCat, tvDebe, tvHaber, tvSaldo;
-        ImageButton btnEditar, btnEliminar;
+        TextView tvFecha, tvCuentaCategoria, tvConcepto, tvMontoIngreso, tvMontoEgreso, tvNeto;
+        ImageView btnEditar, btnEliminar;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            // Mapeo exacto con las IDs de tu item_movimiento.xml
             tvFecha = itemView.findViewById(R.id.tvFecha);
-            tvConcepto = itemView.findViewById(R.id.tvConcepto);
-            tvCuentaCat = itemView.findViewById(R.id.tvCuentaCat);
-            tvDebe = itemView.findViewById(R.id.tvDebe);
-            tvHaber = itemView.findViewById(R.id.tvHaber);
-            tvSaldo = itemView.findViewById(R.id.tvSaldo);
-            btnEditar = itemView.findViewById(R.id.btnEditar);
-            btnEliminar = itemView.findViewById(R.id.btnEliminar);
+            tvCuentaCategoria = itemView.findViewById(R.id.tvCuentaCategoriaItem);
+            tvConcepto = itemView.findViewById(R.id.tvConceptoItem);
+            tvMontoIngreso = itemView.findViewById(R.id.tvMontoIngresoItem);
+            tvMontoEgreso = itemView.findViewById(R.id.tvMontoEgresoItem);
+            tvNeto = itemView.findViewById(R.id.tvNetoItem);
+
+            btnEditar = itemView.findViewById(R.id.btnEditarItem);
+            btnEliminar = itemView.findViewById(R.id.btnEliminarItem);
         }
     }
 }
