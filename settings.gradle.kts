@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "IngresosEgresosApp"
-include ':app'
+rootProject.name = "IngresosEgresosCX"
+include(":app")
