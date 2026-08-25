@@ -38,6 +38,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _movimientoAEditar = mutableStateOf<Movimiento?>(null)
     val movimientoAEditar: State<Movimiento?> = _movimientoAEditar
 
+    private val _searchQuery = mutableStateOf("")
+    val searchQuery: State<String> = _searchQuery
+
     data class ResumenMes(
         val totalIngresos: Double = 0.0,
         val totalEgresos: Double = 0.0,
@@ -64,6 +67,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun setAnio(anio: Int) {
         _anioSeleccionado.value = anio
         actualizarMesesDisponibles(anio)
+        actualizarTablaYTotales()
+    }
+
+    fun setSearchQuery(query: String) {
+        _searchQuery.value = query
         actualizarTablaYTotales()
     }
 
@@ -99,6 +107,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     private fun actualizarTablaYTotales() {
+        if (_searchQuery.value.isNotBlank()) {
+            val lista = dbHelper.buscarMovimientosPorConcepto(_searchQuery.value)
+            _movimientos.value = lista
+            _resumenMes.value = ResumenMes() // Opcional: podrías calcular el resumen de la búsqueda
+            return
+        }
+
         // Solo actualizar si hay datos
         if (_aniosDisponibles.value.isEmpty()) {
             _movimientos.value = emptyList()

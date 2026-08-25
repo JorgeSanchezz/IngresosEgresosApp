@@ -38,6 +38,17 @@ object JsonBackupUtils {
                 obj.put("cuenta", m.cuenta)
                 obj.put("categoria_id", m.categoriaId)
                 obj.put("tipo_movimiento", m.tipoMovimiento)
+                
+                // Guardar solo el nombre del archivo para portabilidad
+                val fileName = m.imagenUri?.let { uriStr ->
+                    try {
+                        android.net.Uri.parse(uriStr).lastPathSegment
+                    } catch (e: Exception) {
+                        null
+                    }
+                }
+                obj.put("imagen_uri", fileName)
+                
                 arrayMovimientos.put(obj)
             }
             root.put("movimientos", arrayMovimientos)
@@ -98,6 +109,14 @@ object JsonBackupUtils {
                 val arrayMov = root.getJSONArray("movimientos")
                 for (i in 0 until arrayMov.length()) {
                     val obj = arrayMov.getJSONObject(i)
+                    
+                    // Reconstruir Uri local
+                    val fileName = if (obj.has("imagen_uri") && !obj.isNull("imagen_uri")) obj.getString("imagen_uri") else null
+                    val uriString = fileName?.let { 
+                        val file = java.io.File(java.io.File(context.filesDir, "images"), it)
+                        android.net.Uri.fromFile(file).toString()
+                    }
+
                     dbHelper.insertarMovimientoConId(
                         obj.getInt("id"),
                         obj.getString("fecha"),
@@ -106,7 +125,8 @@ object JsonBackupUtils {
                         obj.getDouble("haber"),
                         obj.getString("cuenta"),
                         obj.getInt("categoria_id"),
-                        obj.getString("tipo_movimiento")
+                        obj.getString("tipo_movimiento"),
+                        uriString
                     )
                 }
             }

@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -146,7 +147,8 @@ fun MovimientoFormDialog(
                     value = concepto,
                     onValueChange = { concepto = it },
                     label = { Text("Concepto") },
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                    keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences)
                 )
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     OutlinedTextField(
@@ -381,7 +383,8 @@ fun TransferenciaDialog(
                     value = concepto,
                     onValueChange = { concepto = it },
                     label = { Text("Concepto (opcional)") },
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                    keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences)
                 )
                 
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -474,7 +477,12 @@ fun CategoriasDialog(
             title = { Text("Nueva Categoría") },
             text = {
                 Column {
-                    OutlinedTextField(value = newCatName, onValueChange = { newCatName = it }, label = { Text("Nombre") })
+                    OutlinedTextField(
+                        value = newCatName,
+                        onValueChange = { newCatName = it },
+                        label = { Text("Nombre") },
+                        keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences)
+                    )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text("Tipo:", style = MaterialTheme.typography.labelSmall)
                     Row {
@@ -531,10 +539,10 @@ fun OptionsBottomSheet(
             OptionItem(Icons.Default.PictureAsPdf, "Exportar a PDF (.pdf)", "Generar PDF") {
                 onOptionClick(6)
             }
-            OptionItem(Icons.Default.Backup, "Exportar Backup (JSON)", "Guardar respaldo de toda la base de datos") {
+            OptionItem(Icons.Default.Backup, "Exportar Respaldo Completo (ZIP)", "Guardar base de datos y fotos de tickets") {
                 onOptionClick(4)
             }
-            OptionItem(Icons.Default.FileUpload, "Importar Backup (JSON)", "Restaurar datos desde un archivo") {
+            OptionItem(Icons.Default.FileUpload, "Importar Respaldo Completo (ZIP)", "Restaurar datos y fotos desde archivo") {
                 onOptionClick(5)
             }
         }

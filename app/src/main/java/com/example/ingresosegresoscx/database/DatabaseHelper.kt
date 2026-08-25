@@ -479,6 +479,38 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         return resumen
     }
 
+    fun buscarMovimientosPorConcepto(queryText: String): List<Movimiento> {
+        val lista = mutableListOf<Movimiento>()
+        val db = this.readableDatabase
+
+        val query = "SELECT m.*, c.$COLUMN_CAT_NOMBRE FROM $TABLE_MOVIMIENTOS m " +
+                "LEFT JOIN $TABLE_CATEGORIAS c ON m.$COLUMN_CATEGORIA_ID = c.$COLUMN_CAT_ID " +
+                "WHERE m.$COLUMN_CONCEPTO LIKE ? ORDER BY m.$COLUMN_FECHA DESC, m.$COLUMN_ID DESC"
+
+        db.rawQuery(query, arrayOf("%$queryText%")).use { cursor ->
+            if (cursor.moveToFirst()) {
+                do {
+                    val id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID))
+                    val fecha = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_FECHA))
+                    val concepto = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CONCEPTO))
+                    val debe = cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_DEBE))
+                    val haber = cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_HABER))
+                    val cuenta = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CUENTA))
+                    val catId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_CATEGORIA_ID))
+                    val tipo = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TIPO_MOVIMIENTO))
+                    val imagenUri = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_IMAGEN_URI))
+                    val catNombre = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CAT_NOMBRE))
+
+                    val mov = Movimiento(id, fecha, concepto, debe, haber, cuenta, catId, tipo)
+                    mov.nombreCategoria = catNombre ?: "Sin Categoría"
+                    mov.imagenUri = imagenUri
+                    lista.add(mov)
+                } while (cursor.moveToNext())
+            }
+        }
+        return lista
+    }
+
     // ==================== FILTROS DINÁMICOS ====================
     fun obtenerAniosDisponibles(): List<Int> {
         val lista = mutableListOf<Int>()

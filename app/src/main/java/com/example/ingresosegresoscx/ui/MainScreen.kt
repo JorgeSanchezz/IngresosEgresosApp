@@ -5,7 +5,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -16,6 +18,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -26,6 +29,7 @@ import com.example.ingresosegresoscx.ui.theme.EmeraldIncome
 import com.example.ingresosegresoscx.ui.theme.IndigoPrimary
 import java.text.DecimalFormat
 import java.util.*
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,7 +46,12 @@ fun MainScreen(
     val selectedYear by viewModel.anioSeleccionado
     val availableYears by viewModel.aniosDisponibles
     val availableMonths by viewModel.mesesDisponibles
+    val searchQuery by viewModel.searchQuery
 
+    val listState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
+
+    var isSearchActive by remember { mutableStateOf(false) }
     var imagenUriParaVer by remember { mutableStateOf<String?>(null) }
 
     val fmt = DecimalFormat("$#,##0.00")
@@ -50,13 +59,57 @@ fun MainScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Ingresos y Egresos") },
-                actions = {
-                    IconButton(onClick = { onOpenDialog("Grafica") }) {
-                        Icon(Icons.Default.List, contentDescription = "Gráfica")
+                title = {
+                    if (isSearchActive) {
+                        TextField(
+                            value = searchQuery,
+                            onValueChange = { viewModel.setSearchQuery(it) },
+                            placeholder = { Text("Buscar concepto...", color = Color.White.copy(alpha = 0.7f)) },
+                            modifier = Modifier.fillMaxWidth(),
+                            singleLine = true,
+                            keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
+                            colors = TextFieldDefaults.colors(
+                                focusedContainerColor = Color.Transparent,
+                                unfocusedContainerColor = Color.Transparent,
+                                disabledContainerColor = Color.Transparent,
+                                focusedTextColor = Color.White,
+                                unfocusedTextColor = Color.White,
+                                cursorColor = Color.White,
+                                focusedIndicatorColor = Color.White,
+                                unfocusedIndicatorColor = Color.White.copy(alpha = 0.5f)
+                            )
+                        )
+                    } else {
+                        Text("Ingresos y Egresos")
                     }
-                    IconButton(onClick = { onOpenDialog("Menu") }) {
-                        Icon(Icons.Default.MoreVert, contentDescription = "Más opciones")
+                },
+                navigationIcon = {
+                    if (isSearchActive) {
+                        IconButton(onClick = {
+                            isSearchActive = false
+                            viewModel.setSearchQuery("")
+                        }) {
+                            Icon(Icons.Default.ArrowBack, contentDescription = "Cerrar búsqueda", tint = Color.White)
+                        }
+                    }
+                },
+                actions = {
+                    if (!isSearchActive) {
+                        IconButton(onClick = { isSearchActive = true }) {
+                            Icon(Icons.Default.Search, contentDescription = "Buscar")
+                        }
+                        IconButton(onClick = { onOpenDialog("Grafica") }) {
+                            Icon(Icons.Default.List, contentDescription = "Gráfica")
+                        }
+                        IconButton(onClick = { onOpenDialog("Menu") }) {
+                            Icon(Icons.Default.MoreVert, contentDescription = "Más opciones")
+                        }
+                    } else {
+                        if (searchQuery.isNotEmpty()) {
+                            IconButton(onClick = { viewModel.setSearchQuery("") }) {
+                                Icon(Icons.Default.Close, contentDescription = "Limpiar", tint = Color.White)
+                            }
+                        }
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -67,12 +120,42 @@ fun MainScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = onAddMovimiento,
-                containerColor = IndigoPrimary,
-                contentColor = Color.White
-            ) {
-                Icon(Icons.Default.Add, contentDescription = "Agregar")
+            Column(horizontalAlignment = Alignment.End) {
+                SmallFloatingActionButton(
+                    onClick = {
+                        coroutineScope.launch {
+                            listState.animateScrollToItem(0)
+                        }
+                    },
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                ) {
+                    Icon(Icons.Default.KeyboardArrowUp, contentDescription = "Ir al inicio")
+                }
+
+                SmallFloatingActionButton(
+                    onClick = {
+                        coroutineScope.launch {
+                            if (movements.isNotEmpty()) {
+                                listState.animateScrollToItem(movements.size - 1)
+                            }
+                        }
+                    },
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                ) {
+                    Icon(Icons.Default.KeyboardArrowDown, contentDescription = "Ir al final")
+                }
+
+                FloatingActionButton(
+                    onClick = onAddMovimiento,
+                    containerColor = IndigoPrimary,
+                    contentColor = Color.White
+                ) {
+                    Icon(Icons.Default.Add, contentDescription = "Agregar")
+                }
             }
         }
     ) { padding ->
@@ -82,28 +165,31 @@ fun MainScreen(
                 .padding(padding)
                 .padding(16.dp)
         ) {
-            Dashboard(saldos, fmt)
-            
-            Spacer(modifier = Modifier.height(16.dp))
-            
-            if (availableYears.isNotEmpty()) {
-                Filters(
-                    selectedMonth = selectedMonth,
-                    selectedYear = selectedYear,
-                    availableMonths = availableMonths,
-                    availableYears = availableYears,
-                    onMonthSelected = { viewModel.setMes(it) },
-                    onYearSelected = { viewModel.setAnio(it) }
-                )
-                
+            if (!isSearchActive) {
+                Dashboard(saldos, fmt)
                 Spacer(modifier = Modifier.height(16.dp))
-                
-                ResumenMesCard(resumen, fmt)
-                
-                Spacer(modifier = Modifier.height(16.dp))
+            }
+            
+            if (availableYears.isNotEmpty() || isSearchActive) {
+                if (!isSearchActive) {
+                    Filters(
+                        selectedMonth = selectedMonth,
+                        selectedYear = selectedYear,
+                        availableMonths = availableMonths,
+                        availableYears = availableYears,
+                        onMonthSelected = { viewModel.setMes(it) },
+                        onYearSelected = { viewModel.setAnio(it) }
+                    )
+                    
+                    Spacer(modifier = Modifier.height(16.dp))
+                    
+                    ResumenMesCard(resumen, fmt)
+                    
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
                 
                 Text(
-                    text = "Movimientos",
+                    text = if (isSearchActive) "Resultados de búsqueda" else "Movimientos",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
@@ -111,6 +197,7 @@ fun MainScreen(
                 Spacer(modifier = Modifier.height(8.dp))
                 
                 LazyColumn(
+                    state = listState,
                     modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                     contentPadding = PaddingValues(bottom = 80.dp)

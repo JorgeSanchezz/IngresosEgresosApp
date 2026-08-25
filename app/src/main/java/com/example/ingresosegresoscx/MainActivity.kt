@@ -15,6 +15,7 @@ import com.example.ingresosegresoscx.ui.*
 import com.example.ingresosegresoscx.ui.theme.IngresosEgresosTheme
 import com.example.ingresosegresoscx.utils.ExcelExporter
 import com.example.ingresosegresoscx.utils.JsonBackupUtils
+import com.example.ingresosegresoscx.utils.ZipBackupHelper
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
@@ -74,11 +75,11 @@ class MainActivity : ComponentActivity() {
                                     }
                                     4 -> {
                                         viewModel.setActiveDialog(null)
-                                        createDocumentLauncher.launch("IngresosEgresosCX_Backup.json")
+                                        createDocumentLauncher.launch("IngresosEgresosCX_Backup.zip")
                                     }
                                     5 -> {
                                         viewModel.setActiveDialog(null)
-                                        openDocumentLauncher.launch(arrayOf("application/json"))
+                                        openDocumentLauncher.launch(arrayOf("application/zip", "application/json", "application/octet-stream"))
                                     }
                                     6 -> {
                                         viewModel.setActiveDialog(null)
@@ -127,12 +128,12 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun setupLaunchers() {
-        createDocumentLauncher = registerForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
-            uri?.let { exportarJsonAUri(it) }
+        createDocumentLauncher = registerForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) { uri ->
+            uri?.let { exportarBackupAUri(it) }
         }
 
         openDocumentLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
-            uri?.let { importarJsonDesdeUri(it) }
+            uri?.let { importarBackupDesdeUri(it) }
         }
 
         createPdfLauncher = registerForActivityResult(ActivityResultContracts.CreateDocument("application/pdf")) { uri ->
@@ -188,37 +189,26 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun exportarJsonAUri(uri: Uri) {
+    private fun exportarBackupAUri(uri: Uri) {
         try {
-            val json = JsonBackupUtils.exportarDatos(this, viewModel.getDbHelper())
-            if (json != null) {
-                contentResolver.openOutputStream(uri)?.use { os ->
-                    os.write(json.toByteArray())
-                    Toast.makeText(this, "Backup exportado con éxito", Toast.LENGTH_SHORT).show()
-                }
+            if (ZipBackupHelper.exportarBackupZip(this, uri, viewModel.getDbHelper())) {
+                Toast.makeText(this, "Respaldo exportado con éxito (.zip)", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Error al exportar el respaldo", Toast.LENGTH_SHORT).show()
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            Toast.makeText(this, "Error al exportar: ${e.message}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun importarJsonDesdeUri(uri: Uri) {
+    private fun importarBackupDesdeUri(uri: Uri) {
         try {
-            contentResolver.openInputStream(uri)?.use { inputStream ->
-                val reader = BufferedReader(InputStreamReader(inputStream))
-                val sb = StringBuilder()
-                var line: String?
-                while (reader.readLine().also { line = it } != null) {
-                    sb.append(line)
-                }
-
-                if (JsonBackupUtils.importarDatos(this, sb.toString(), viewModel.getDbHelper())) {
-                    viewModel.actualizarTodo()
-                    Toast.makeText(this, "Backup importado con éxito", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(this, "Error al procesar el archivo JSON", Toast.LENGTH_SHORT).show()
-                }
+            if (ZipBackupHelper.importarBackupZip(this, uri, viewModel.getDbHelper())) {
+                viewModel.actualizarTodo()
+                Toast.makeText(this, "Respaldo importado con éxito", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Error al importar el archivo", Toast.LENGTH_SHORT).show()
             }
         } catch (e: Exception) {
             e.printStackTrace()
